@@ -60,7 +60,7 @@ function checkTextInput(input){
       // set message
       formDataBinded.setAttribute("data-error","Veuillez entrer une adresse mail valide(ex: john@doe.com).");
       // email regex declaration
-      const mailRegex = new RegExp("([a-z]+)+@([a-z]{2,})+\.([a-z]{2,})+");
+      const mailRegex = new RegExp("([a-z]+)+@([a-z]+)+.([a-z]{2,})+");
       // test input value
       var checkInput = mailRegex.test(input.value);
       setVisibility(checkInput);
@@ -133,7 +133,6 @@ function validate(event){
   // check empty text
   var emptyText;
 
-  // empty text
   for(let i = 0; i < textInput.length; i++){
     if(textInput[i].value == ''){
       emptyText = true;textInput.forEach((input) => input.addEventListener("blur", checkTextInput));
@@ -158,20 +157,26 @@ function validate(event){
     }
   }
 
+  console.log(boxChecked);
   // set location error
-  if(boxChecked == false){
-    checkBoxesNodeError.setAttribute("data-error", "il vous faut cocher au moins une option");
+  if(boxChecked == undefined){
+    checkBoxesNodeError.setAttribute("data-error", "il vous faut choisir au moins une option");
     checkBoxesNodeError.setAttribute("data-error-visible", true);
+  }else{
+    checkBoxesNodeError.setAttribute("data-error-visible", false);
   }
   
   // full -1 CGU
   var cgu = checkBoxes[checkBoxesLength].checked;
+  console.log(cgu);
   let cguParent = checkBoxes[checkBoxesLength].parentNode;
   
   // set cgu error
   if(cgu == false){
     cguParent.setAttribute("data-error", "Vous devez accepter les termes et conditions");
     cguParent.setAttribute("data-error-visible", true);
+  }else{
+    cguParent.setAttribute("data-error-visible", false);
   }
 
   // au moins 1 loca + cgu
@@ -181,54 +186,28 @@ function validate(event){
   if(cgu && boxChecked){
     checkBoxesChecked = true;
   }
-
-  console.log(!emptyText);
-  console.log(!textError);
-  console.log(checkBoxesChecked);
   
   // pas de texte vide + pas d'erreur text + locacgu
   // envoi formulaire
 
   if (!emptyText && !textError && checkBoxesChecked){
-    console.log("plop");
     
+    let XHR = new XMLHttpRequest();
     let form = document.querySelector("form");
-    console.log(form);
-
-    var FD = new FormData();
-
-    for(let i = 0; i < form.length -2; i++){
-      let inputs = form[i];
-      console.log(inputs.name);
-      console.log(inputs.value);
-      FD.append(name, inputs.name);
-      FD.append(value, inputs.value);
-      console.log(FD);
-    }
-
-    // for(let name of form){
-    //   console.log(name);
-    // }
-
-    // form.forEach((input) =>
-    // );
-    console.log(FD);
+    let FD = new FormData(form);
     
-    // //define success 
-    // XHR.addEventListener("load", function(event){
-    //   alert("Envoyé !");
-    // });
+    //define success 
+    XHR.addEventListener("load", function(event){
+      alert("Merci ! Votre réservation a été reçue.");
+    });
     
-    // //define error
-    // XHR.addEventListener("error", function(event){
-    //   alert("Erreur !");
-    // });
-    
-    // //Config request
-    // XHR.open("POST", "/test.php");
-    
-    // // send Data
-    // XHR.send(FD);  
+    //define error
+    XHR.addEventListener("error", function(event){
+      alert("Erreur !");
+    });
+
+   XHR.open("POST", "/example.php");
+    // send Data
+    XHR.send(FD);  
   }
 }
-
