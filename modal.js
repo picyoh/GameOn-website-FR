@@ -13,6 +13,7 @@ const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const closeBtn = document.querySelector(".close");
+const textInput = document.querySelectorAll(".text-control");
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -20,6 +21,7 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 // launch modal form
 function launchModal() {
   modalbg.style.display = "block";
+  textInput[0].focus();
 }
 
 //close modal event
@@ -31,7 +33,6 @@ function closeModal() {
 }
  
 // launch blur event for text-control
-var textInput = document.querySelectorAll(".text-control");
 textInput.forEach((input) => input.addEventListener("blur", checkTextInput));
 
 //text error
