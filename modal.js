@@ -21,6 +21,7 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 // launch modal form
 function launchModal() {
   modalbg.style.display = "block";
+  // autofocus
   textInput[0].focus();
 }
 
@@ -34,9 +35,6 @@ function closeModal() {
  
 // launch blur event for text-control
 textInput.forEach((input) => input.addEventListener("blur", checkTextInput));
-
-//text error
-var textError;
 
 function checkTextInput(input){
   // get actual input
@@ -69,11 +67,11 @@ function checkTextInput(input){
     
     case "birthdate":
           // get year of birth
-    var birthdateYear = input.value.substring(0,4);
+    let birthdateYear = input.value.substring(0,4);
     // get date
-    var date = new Date();
+    let date = new Date();
     // get year
-    var year = date.getFullYear();
+    let year = date.getFullYear();
     // BD empty
     if(input.value == ""){
       // set message
@@ -118,13 +116,59 @@ function checkTextInput(input){
     if(checkInput == true){
       //remove error
       formDataBinded.setAttribute("data-error-visible", false);
-      textError = false;
+      return textError = false;
     }else if(checkInput == false){
       // set visibility 
       formDataBinded.setAttribute("data-error-visible", true);
-      textError = true;
+      return textError = true;
     }
   }
+}
+
+
+// check checkBox
+function checkboxCheck(){
+  // CheckBoxes
+  let checkBoxes = document.querySelectorAll(".checkbox-input");
+  // all except the last 2
+  let checkBoxesLength = checkBoxes.length - 2;
+  let checkBoxesNodeError;
+
+  // creer boucle full -2 pour location
+  for(let i = 0; i < (checkBoxesLength); i++){
+    if(checkBoxes[i].checked == true){
+      var boxChecked = true;
+    }else {
+      checkBoxesNodeError = checkBoxes[i].parentNode;
+    }
+  }
+
+  // set location error
+  if(boxChecked == undefined){
+    checkBoxesNodeError.setAttribute("data-error", "il vous faut choisir au moins une option");
+    checkBoxesNodeError.setAttribute("data-error-visible", true);
+  }else{
+    checkBoxesNodeError.setAttribute("data-error-visible", false);
+  }
+
+  // CGU
+  let cgu = checkBoxes[checkBoxesLength].checked;
+  let cguParent = checkBoxes[checkBoxesLength].parentNode;
+
+  // set cgu error
+  if(cgu == false){
+    cguParent.setAttribute("data-error", "Vous devez accepter les termes et conditions");
+    cguParent.setAttribute("data-error-visible", true);
+  }else{
+    cguParent.setAttribute("data-error-visible", false);
+  }
+
+  if(cgu && boxChecked){
+    return checkBoxesChecked = true;
+  }else {
+    return checkBoxesChecked = false;
+  }
+  console.log(checkBoxesChecked);
 }
 
 function validate(event){
@@ -142,55 +186,10 @@ function validate(event){
       emptyText = false;
     }
   }
-
-  // CheckBoxes
-  var checkBoxes = document.querySelectorAll(".checkbox-input");
-  // all except the last 2 ()
-  let checkBoxesLength = checkBoxes.length - 2;
-  let checkBoxesNodeError;
-
-  // creer boucle full -2 pour location
-  for(let i = 0; i < (checkBoxesLength); i++){
-    if(checkBoxes[i].checked == true){
-      var boxChecked = true;
-    }else {
-      checkBoxesNodeError = checkBoxes[i].parentNode;
-    }
-  }
-
-  console.log(boxChecked);
-  // set location error
-  if(boxChecked == undefined){
-    checkBoxesNodeError.setAttribute("data-error", "il vous faut choisir au moins une option");
-    checkBoxesNodeError.setAttribute("data-error-visible", true);
-  }else{
-    checkBoxesNodeError.setAttribute("data-error-visible", false);
-  }
   
-  // full -1 CGU
-  var cgu = checkBoxes[checkBoxesLength].checked;
-  console.log(cgu);
-  let cguParent = checkBoxes[checkBoxesLength].parentNode;
-  
-  // set cgu error
-  if(cgu == false){
-    cguParent.setAttribute("data-error", "Vous devez accepter les termes et conditions");
-    cguParent.setAttribute("data-error-visible", true);
-  }else{
-    cguParent.setAttribute("data-error-visible", false);
-  }
+  checkboxCheck();
 
-  // au moins 1 loca + cgu
-  
-  let checkBoxesChecked ;
-  
-  if(cgu && boxChecked){
-    checkBoxesChecked = true;
-  }
-  
-  // pas de texte vide + pas d'erreur text + locacgu
-  // envoi formulaire
-
+  // send form
   if (!emptyText && !textError && checkBoxesChecked){
     
     let XHR = new XMLHttpRequest();
