@@ -59,7 +59,7 @@ function checkTextInput(input){
       // set message
       formDataBinded.setAttribute("data-error","Veuillez entrer une adresse mail valide(ex: john@doe.com).");
       // email regex declaration
-      const mailRegex = new RegExp("([a-z]+)+@([a-z]+)+.([a-z]{2,})+");
+      const mailRegex = new RegExp(/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/i);
       // test input value
       var checkInput = mailRegex.test(input.value);
       setVisibility(checkInput);
